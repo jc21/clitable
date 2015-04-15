@@ -1,6 +1,8 @@
 CLI Table Output for PHP
 ================================================
 
+![Example](example.png)
+
 - Nice table output of data rows
 - Columns adjust to data size
 - Data manipulators for fields, formats raw data to a nice display output
