@@ -3,7 +3,7 @@
     "description": "CLI Table output for PHP scripts",
     "keywords": ["cli", "table", "command", "line"],
     "homepage": "https://github.com/jc21/clitable",
-    "license": "BSD",
+    "license": "BSD-1-Clause",
     "authors": [
         {
             "name": "Jamie Curnow",
