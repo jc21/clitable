@@ -351,7 +351,7 @@ class CliTable {
                         if (!isset($columnLengths[$key])) {
                             $columnLengths[$key] = 0;
                         }
-                        $columnLengths[$key] = max($columnLengths[$key], strlen($value));
+                        $columnLengths[$key] = max($columnLengths[$key], mb_strlen($value));
                     }
                     $rowCount++;
                 }
@@ -400,7 +400,7 @@ class CliTable {
                 $color = $this->fields[$key]['color'];
             }
 
-            $fieldLength  = strlen($field) + 1;
+            $fieldLength  = mb_strlen($field) + 1;
             $field        = ' '.($this->getUseColors() ? $this->getColorFromName($color) : '').$field;
             $response    .= $field;
 
