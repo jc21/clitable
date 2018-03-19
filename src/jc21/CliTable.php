@@ -335,12 +335,12 @@ class CliTable {
         // Data
         if ($this->injectedData !== null) {
             if (count($this->injectedData)) {
-                foreach ($this->injectedData as $row) {
+                foreach ($this->injectedData as $rowKey => $row) {
                     // Row
                     $cellData[$rowCount] = array();
                     foreach ($this->fields as $field) {
                         $key   = $field['key'];
-                        $value = $this->getValue($row, $key);
+                        $value = $this->getValue($row, $key, $rowKey);
                         if ($field['manipulator'] instanceof CliTableManipulator) {
                             $value = trim($field['manipulator']->manipulate($value, $row, $field['name']));
                         }
@@ -535,10 +535,12 @@ class CliTable {
      * getValue
      *
      * @access protected
-     * @param  (array | ArrayAccess)  $colorName
+     * @param  (array | ArrayAccess)  $row
+     * @param  string  $key
+     * @param  any  $rowKey
      * @return string
      */
-    protected function getValue($row, string $key)
+    protected function getValue($row, string $key, $rowKey)
     {
         return $row[$key];
     }
