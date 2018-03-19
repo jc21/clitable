@@ -340,7 +340,7 @@ class CliTable {
                     $cellData[$rowCount] = array();
                     foreach ($this->fields as $field) {
                         $key   = $field['key'];
-                        $value = $row[$key];
+                        $value = $this->getValue($row, $key);
                         if ($field['manipulator'] instanceof CliTableManipulator) {
                             $value = trim($field['manipulator']->manipulate($value, $row, $field['name']));
                         }
@@ -528,6 +528,19 @@ class CliTable {
             return $this->colors[$colorName];
         }
         return $this->colors['reset'];
+    }
+
+
+    /**
+     * getValue
+     *
+     * @access protected
+     * @param  (array | ArrayAccess)  $colorName
+     * @return string
+     */
+    protected function getValue($row, string $key)
+    {
+        return $row[$key];
     }
 
 
