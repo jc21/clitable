@@ -400,7 +400,7 @@ class CliTable {
                 $color = $this->fields[$key]['color'];
             }
 
-            $fieldLength  = strlen($field) + 1;
+            $fieldLength  = mb_strwidth($field) + 1;
             $field        = ' '.($this->getUseColors() ? $this->getColorFromName($color) : '').$field;
             $response    .= $field;
 
