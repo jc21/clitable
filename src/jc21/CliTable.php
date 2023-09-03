@@ -60,6 +60,15 @@ class CliTable {
     protected $useColors = true;
 
     /**
+     * Center content?
+     *
+     * @var    bool
+     * @access protected
+     *
+     **/
+    protected $centerContent = true;
+
+    /**
      * Table Border Color
      *
      * @var    string
@@ -119,9 +128,10 @@ class CliTable {
      * @param  string $itemName
      * @param  bool   $useColors
      */
-    public function __construct($itemName = 'Row', $useColors = true) {
+    public function __construct($itemName = 'Row', $useColors = true, $centerContent = false) {
         $this->setItemName($itemName);
         $this->setUseColors($useColors);
+        $this->setCenterContent($centerContent);
         $this->defineColors();
     }
 
@@ -139,6 +149,18 @@ class CliTable {
 
 
     /**
+     * setCenterContent
+     *
+     * @access public
+     * @param  bool  $bool
+     * @return void
+     */
+    public function setCenterContent($bool) {
+        $this->centerContent = (bool) $bool;
+    }
+
+
+    /**
      * getUseColors
      *
      * @access public
@@ -146,6 +168,17 @@ class CliTable {
      */
     public function getUseColors() {
         return $this->useColors;
+    }
+
+
+    /**
+     * getCenterContent
+     *
+     * @access public
+     * @return bool
+     */
+    public function getCenterContent() {
+        return $this->centerContent;
     }
 
 
@@ -351,7 +384,8 @@ class CliTable {
                         if (!isset($columnLengths[$key])) {
                             $columnLengths[$key] = 0;
                         }
-                        $columnLengths[$key] = max($columnLengths[$key], strlen($value));
+                        $c = chr(27);
+                        $columnLengths[$key] = max($columnLengths[$key], strlen(preg_replace("/({$c}\[(.*?)m)/s", '', $value)));
                     }
                     $rowCount++;
                 }
@@ -364,18 +398,32 @@ class CliTable {
 
         $response = '';
 
+        $screenWidth = trim(exec("tput cols"));
+
+        // Idea here is we're column the accumulated length of the data
+        // Then adding the quantity of column lengths to accommodate for the extra characters
+        //     for when vertical pipes are placed between each column
+        $dataWidth = mb_strlen($this->getTableTop($columnLengths)) + count($columnLengths);
+
+        $spacing = '';
+
+        // Only try and center when content is less than available space
+        if ($this->getCenterContent() && (($dataWidth/2) < $screenWidth)) {
+            $spacing = str_repeat(' ', ($screenWidth-($dataWidth/2))/2);
+        }
+
         // Now draw the table!
-        $response .= $this->getTableTop($columnLengths);
+        $response .= $spacing . $this->getTableTop($columnLengths);
         if ($this->getShowHeaders()) {
-            $response .= $this->getFormattedRow($headerData, $columnLengths, true);
-            $response .= $this->getTableSeperator($columnLengths);
+            $response .= $spacing . $this->getFormattedRow($headerData, $columnLengths, true);
+            $response .= $spacing . $this->getTableSeperator($columnLengths);
         }
 
         foreach ($cellData as $row) {
-            $response .= $this->getFormattedRow($row, $columnLengths);
+            $response .= $spacing . $this->getFormattedRow($row, $columnLengths);
         }
 
-        $response .= $this->getTableBottom($columnLengths);
+        $response .= $spacing . $this->getTableBottom($columnLengths);
 
         return $response;
     }
@@ -400,7 +448,8 @@ class CliTable {
                 $color = $this->fields[$key]['color'];
             }
 
-            $fieldLength  = mb_strwidth($field) + 1;
+            $c = chr(27);
+            $fieldLength  = mb_strwidth(preg_replace("/({$c}\[(.*?)m)/", '', $field)) + 1;
             $field        = ' '.($this->getUseColors() ? $this->getColorFromName($color) : '').$field;
             $response    .= $field;
 
