@@ -385,7 +385,10 @@ class CliTable {
                             $columnLengths[$key] = 0;
                         }
                         $c = chr(27);
-                        $columnLengths[$key] = max($columnLengths[$key], strlen(preg_replace("/({$c}\[(.*?)m)/s", '', $value)));
+                        $lines = explode("\n", preg_replace("/({$c}\[(.*?)m)/s", '', $value));
+                        foreach ($lines as $line) {
+                            $columnLengths[$key] = max($columnLengths[$key], mb_strlen($line));
+                        }
                     }
                     $rowCount++;
                 }
