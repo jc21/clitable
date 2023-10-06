@@ -442,27 +442,40 @@ class CliTable {
      * @return string
      */
     protected function getFormattedRow($rowData, $columnLengths, $header = false) {
-        $response = $this->getChar('left');
+        $response = '';
 
-        foreach ($rowData as $key => $field) {
-            if ($header) {
-                $color = $this->getHeaderColor();
-            } else {
-                $color = $this->fields[$key]['color'];
-            }
-
-            $c = chr(27);
-            $fieldLength  = mb_strwidth(preg_replace("/({$c}\[(.*?)m)/", '', $field)) + 1;
-            $field        = ' '.($this->getUseColors() ? $this->getColorFromName($color) : '').$field;
-            $response    .= $field;
-
-            for ($x = $fieldLength; $x < ($columnLengths[$key] + 2); $x++) {
-                $response .= ' ';
-            }
-            $response .= $this->getChar('middle');
+        $splitLines = [];
+        $maxLines = 1;
+        foreach ($rowData as $key => $line) {
+            $splitLines[$key] = explode("\n", $line);
+            $maxLines = max($maxLines, count($splitLines[$key]));
         }
 
-        $response = substr($response, 0, strlen($response) - 3) . $this->getChar('right') . PHP_EOL;
+        for ($i = 0; $i < $maxLines; $i++) {
+            $response .= $this->getChar('left');
+
+            foreach ($splitLines as $key => $lines) {
+                if ($header) {
+                    $color = $this->getHeaderColor();
+                } else {
+                    $color = $this->fields[$key]['color'];
+                }
+
+                $line = isset($lines[$i]) ? $lines[$i] : '';
+
+                $c = chr(27);
+                $lineLength = mb_strwidth(preg_replace("/({$c}\[(.*?)m)/", '', $line)) + 1;
+                $line = ' ' . ($this->getUseColors() ? $this->getColorFromName($color) : '') . $line;
+                $response .= $line;
+
+                for ($x = $lineLength; $x < ($columnLengths[$key] + 2); $x++) {
+                    $response .= ' ';
+                }
+                $response .= $this->getChar('middle');
+            }
+            $response = substr($response, 0, strlen($response) - 3) . $this->getChar('right') . PHP_EOL;
+        }
+
         return $response;
     }
 
