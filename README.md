@@ -8,6 +8,7 @@ CLI Table Output for PHP
 - Data manipulators for fields, formats raw data to a nice display output
 - Colors! When specifying a color, choose from these strings: blue, red, green,
   yellow, black, magenta, cyan, white, grey
+- Support for multi-line values.
 
 ### Installing via Composer
 
