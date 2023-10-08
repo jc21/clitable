@@ -1,10 +1,11 @@
-## Table of contents
+# Table of contents
 
 - [\jc21\CliTable](#class-jc21clitable)
 - [\jc21\CliTableManipulator](#class-jc21clitablemanipulator)
 
 <hr /> 
-### Class: \jc21\CliTable
+
+## Class: \jc21\CliTable
 
 | Visibility | Function |
 |:-----------|:---------|
@@ -34,7 +35,8 @@
 | protected | <strong>getTableTop(</strong><em>array</em> <strong>$columnLengths</strong>)</strong> : <em>string</em><br /><em>getTableTop</em> |
 
 <hr /> 
-### Class: \jc21\CliTableManipulator
+
+## Class: \jc21\CliTableManipulator
 
 | Visibility | Function |
 |:-----------|:---------|

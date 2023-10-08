@@ -32,6 +32,7 @@ $table->setTableColor('green');
 $table->setHeaderColor('yellow');
 $table->addField('First Name', 'firstName',    false,                               'cyan');
 $table->addField('Last Name',  'lastName',     false,                               'cyan');
+$table->addField('Hobbies',    'hobbies');
 $table->addField('DOB',        'dobTime',      new CliTableManipulator('datelong'));
 $table->addField('Admin',      'isAdmin',      new CliTableManipulator('yesno'),    'yellow');
 $table->addField('Last Seen',  'lastSeenTime', new CliTableManipulator('nicetime'), 'red');
